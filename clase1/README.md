@@ -25,7 +25,7 @@ El propósito es comprender el ciclo completo de administración de contenedores
 | `-p 8081:80`       | Mapea el puerto local 8080 al puerto 80 del contenedor. |
 | `httpd`            | Imagen oficial de Apache HTTP Server.                   |
 **Screenshot:**
-![docker run httpd](screenshots/docker-run-mi-apache.png)
+![docker-run-httpd](screenshots/docker-run-mi-apache.png)
 
 ---
 ## 1.2. Verificar contenedor Apache
@@ -33,7 +33,7 @@ El propósito es comprender el ciclo completo de administración de contenedores
 `docker ps`
 
 **Screenshot:**
-![docker ps mi-apache](screenshots/mi-apache-docker-ps.png)
+![docker-ps-mi-apache](screenshots/mi-apache-docker-ps.png)
 
 ---
 ## 1.3. Acceder desde el navegador
@@ -43,7 +43,7 @@ Ingresé en:
 `http://192.168.29.134:8081`
 
 **Screenshot:**
-![mi-apache browser](screenshots/mi-apache-browser.png)
+![mi-apache-browser](screenshots/mi-apache-browser.png)
 
 ---
 ## 1.4. Ver logs del contenedor Apache
@@ -51,7 +51,7 @@ Ingresé en:
 `docker logs mi-apache`
 
 **Screenshot:**
-![mi-apache logs](screenshots/mi-apache-logs.png)
+![mi-apache-logs](screenshots/mi-apache-logs.png)
 
 ---
 
@@ -60,7 +60,7 @@ Ingresé en:
 `docker stop mi-apache docker rm mi-apache`
 
 **Screenshot:**
-![mi-apache stop rm](screenshots/mi-apache-removed.png)
+![mi-apache-stop-rm](screenshots/mi-apache-removed.png)
 
 ---
 
@@ -82,7 +82,7 @@ Ingresé en:
 |`-p 6379:6379`|Expone el puerto de Redis al host.|
 |`redis`|Imagen oficial del servidor Redis.|
 **Screenshot:**
-![docker run mi-redis](screenshots/docker-run-mi-redis.png)
+![docker-run-mi-redis](screenshots/docker-run-mi-redis.png)
 
 ---
 
@@ -91,7 +91,7 @@ Ingresé en:
 `docker ps`
 
 **Screenshot:**
-![docker ps mi-redis](screenshots/mi-redis-docker-ps.png)
+![docker-ps-mi-redis](screenshots/mi-redis-docker-ps.png)
 
 ---
 
@@ -100,7 +100,7 @@ Ingresé en:
 `docker exec -it mi-redis redis-cli`
 
 **Screenshot:**
-![mi-redis cli](screenshots/mi-redis-cli.png)
+![mi-redis-cli](screenshots/mi-redis-cli.png)
 
 ---
 
@@ -109,7 +109,7 @@ Ingresé en:
 `docker logs mi-redis`
 
 **Screenshot:**
-![mi-redis logs](screenshots/mi-redis-logs.png)
+![mi-redis-logs](screenshots/mi-redis-logs.png)
 
 ---
 
@@ -118,7 +118,7 @@ Ingresé en:
 `docker stop mi-redis docker rm mi-redis`
 
 **Screenshot:**
-![mi-redis removed](screenshots/mi-redis-removed.png)
+![mi-redis-removed](screenshots/mi-redis-removed.png)
 
 ---
 
@@ -140,7 +140,7 @@ Ingresé en:
 | `-e MYSQL_ROOT_PASSWORD=` | Crea variable de entorno: contraseña del usuario root. |
 | `mysql`                   | Imagen oficial de MySQL.                               |
 **Screenshot:**
-![docker run mi-mysql](screenshots/docker-run-mi-mysql.png)
+![docker-run-mi-mysql](screenshots/docker-run-mi-mysql.png)
 
 ---
 
@@ -149,7 +149,7 @@ Ingresé en:
 `docker ps`
 
 **Screenshot:**
-![mi-mysql ps](screenshots/mi-mysql-docker-ps.png)
+![mi-mysql-ps](screenshots/mi-mysql-docker-ps.png)
 
 ---
 
@@ -158,7 +158,7 @@ Ingresé en:
 `docker exec -it mi-mysql mysql -uroot -p`
 
 **Screenshot:**
-![mi-mysql conexion](screenshots/mi-mysql-cli.png)
+![mi-mysql-conexion](screenshots/mi-mysql-cli.png)
 
 ---
 
@@ -167,7 +167,7 @@ Ingresé en:
 `docker logs mi-mysql`
 
 **Screenshot:**
-![mi-mysql logs](screenshots/mi-mysql-logs.png)
+![mi-mysql-logs](screenshots/mi-mysql-logs.png)
 
 ---
 
@@ -176,7 +176,7 @@ Ingresé en:
 `docker stop mi-mysql docker rm mi-mysql`
 
 **Screenshot:**
-![mi-mysql removed](screenshots/mi-mysql-removed.png)
+![mi-mysql-removed](screenshots/mi-mysql-removed.png)
 
 ---
 
