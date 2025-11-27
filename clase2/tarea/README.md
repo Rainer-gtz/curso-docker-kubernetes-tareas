@@ -132,7 +132,7 @@ Comando utilizado:
 
 ### **URL Pública**
 
-`https://hub.docker.com/r/miusuario/mi-nodejs-app`
+`https://hub.docker.com/repository/docker/rainergtz/mi-nodejs/general`
 
 ### **Screenshot de Docker Hub**
 
