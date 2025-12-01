@@ -1,187 +1,187 @@
-# Clase 2 – Dockerización de Aplicación Node.js con Multi-Stage Build
+**Curso:** Docker & Kubernetes - Clase 3  (Dcoker Compose) 
+**Estudiante:** Rainer Huber Gutierrez Pabón GTZ  
+## Descripción Pequeña aplicación multi-contenedor que demuestra Docker Compose, redes personalizadas y persistencia con volúmenes. Stack: `nginx` (web estático), `mysql` (BD) y `adminer` (GUI de BD).    
+## Stack 
+- App: Nginx (static HTML) 
+- Base de datos: MySQL 8.0 
+- GUI: Adminer 
+- Orquestación: Docker Compose (v2) 
+- Red: `app-network` 
+- Volumen: `db-data` (persistencia MySQL)  
+## Estructura del repositorio``
 
-## 1. Descripción de la Aplicación
+/curso-docker-kubernetes-tareas/clase3/  
+├── README.md  
+├── docker-compose.yml  
+├── .gitignore  
+├── html/  
+│ └── index.html  
+└── initdb/  
+└── init.sql
 
-**Lenguaje:** Node.js  
-**Framework:** Express  
-**Entorno:** AlmaLinux 9.6 + Docker Engine
+## Requisitos 
+- Docker (daemon corriendo) 
+- Docker Compose (v2; comando `docker compose`)  
+	## Ejecución (desde la raíz del repositorio) 
+	1. Clonar:    ```bash    git clone https://github.com/Rainer-gtz/curso-docker-kubernetes-tareas/tree/main/clase3    
+	2. cd curso-docker-kubernetes-tareas/clase3/``
 
-Esta es una pequeña API REST creada para fines de práctica en la clase 2, con endpoints básicos para manejar datos de usuarios de ejemplo.
-
-### **Funcionalidad Principal**
-
-La aplicación expone endpoints simples que permiten:
-
-- Ver una página de bienvenida
+2. Levantar los servicios (modo detached):
     
-- Listar usuarios
+    `docker compose up -d`
     
-- Obtener un usuario por ID
+3. Verificar que se levantaron:
     
-### **Endpoints Disponibles**
+    `docker compose ps`
+    
+4. Acceder:
+    
+    - Web: [http://localhost:8080](http://localhost:8080)
+        
+    - Adminer: [http://localhost:8081](http://localhost:8081)
+        
+        - Sistema: MySQL
+            
+        - Server: curso_mysql — nombre del servicio
+            
+        - Usuario: curso
+            
+        - Contraseña: curso123
+            
+        - Database: curso_db
+            
 
-|Método|Endpoint|Descripción|
-|---|---|---|
-|GET|`/`|Página de bienvenida de la API|
-|GET|`/api/users`|Lista de usuarios|
-|GET|`/api/users/:id`|Obtiene un usuario según ID|
+## Verificaciones importantes (comandos)
 
----
-## 2. Dockerfile
+- Servicios corriendo:
+    
+    `docker compose ps`
+    
+- Ver volúmenes:
+    
+    `docker volume ls`
+    
+- Inspeccionar red:
+    
+    `docker network ls 
+    `docker network inspect clase3_app-network`
+    
+- Probar persistencia:
+    
+    `docker compose down 
+    `docker compose up -d 
+    `docker compose exec mysql mysql -u curso -pcurso123 -D curso_db -e "SELECT * FROM productos;"`
+    
 
-### **Código completo**
+> **Importante:** No se debe usar `docker compose down -v` si se desea conservar los datos.
 
-`# ============================ # Stage 1: Builder # ============================ FROM node:18-alpine AS builder  WORKDIR /app  COPY package*.json ./ RUN npm install  COPY . .  # ============================ # Stage 2: Production # ============================ FROM node:18-alpine  WORKDIR /app  COPY --from=builder /app ./  EXPOSE 3000 CMD [ "node", "app.js" ]`
-**Codigo:**
-[Dockerfile](mi-nodejs/Dockerfile)
----
+# Capturas de Pantalla – Tarea Clase 3
 
-### **Explicación de Cada Stage**
-
-|Stage|Propósito|Explicación|
-|---|---|---|
-|**builder**|Instalar dependencias|Aquí se descargan e instalan todos los paquetes necesarios. Se copian los archivos fuente.|
-|**production**|Imagen final optimizada|Solo contiene lo esencial para ejecutar la app, copiando desde el builder. Reduce el tamaño y mejora seguridad.|
-
----
-
-### **Tabla de Instrucciones del Dockerfile**
-
-|Instrucción|Función|
-|---|---|
-|`FROM`|Define la imagen base|
-|`WORKDIR`|Carpeta de trabajo dentro del contenedor|
-|`COPY`|Copia archivos desde el host|
-|`RUN`|Ejecuta comandos en la imagen|
-|`EXPOSE`|Documenta el puerto que usará la app|
-|`CMD`|Comando por defecto al iniciar|
-## 3. app.js
-
-**Codigo:**
-[app.js](mi-nodejs/app.js)
----
-## 4. package.json
-
-**Codigo:**
-[package.json](mi-nodejs/package.json)
----
-## 5. .dockerignore
-
-**Codigo:**
-[.dockerignore](mi-nodejs/.dockerignore)
-
----
-
-## 6. Proceso de Build
-
-Comando utilizado:
-
-`docker build -t mi-nodejs:1.0 .`
-**Screenshot:**
-![mi-apache build](screenshots/docker-build-mi-nodejs.png)
-
-### **Tamaño final de la imagen**
-
-`docker images mi-nodejs`
-**Screenshot:**
-![docker images mi-nodejs](screenshots/docker-images-mi-nodejs.png)
+Este apartado contiene todas las capturas de pantalla generadas durante la ejecución de la Tarea 3 — Aplicación Multi-Contenedor con Docker Compose.
 
 ---
 
-## 7. Testing Local
+## 1 Estado general de los servicios
 
-### **Ejecutar el contenedor**
+### **docker-compose ps**
 
-`docker run -d -p 3000:3000 --name mi-node mi-nodejs-app:1.0`
-**Screenshot:**
-![docker run mi-nodejs](screenshots/docker-run-mi-nodejs.png)
-
+Muestra que los servicios `curso_nginx`, `curso_mysql` y `curso_adminer` están en ejecución.
+![docker compose ps](screenshots/docker-compose-ps.png)
 ---
 
-### Screenshots requeridos
+## 2 Archivo docker-compose.yml funcionando
 
-#### **docker images**
+### **docker compose up -d**
 
-![docker images](screenshots/docker-images-mi-nodejs.png)
-
-#### **docker ps**
-
-![docker ps](screenshots/docker-ps.png)
-
-#### **Probando en el navegador**
-**Screenshot:**
-![web browser mi-nodejs](screenshots/web-browser-3000.png)
-
-#### **Probando endpoint de usuarios**
-**Screenshot:**
-![web browser mi-nodejs usuarios](screenshots/web-browser-api-users-mi-nodejs.png)
-
-#### **docker logs**
-**Screenshot:**
-![docker logs mi-nodejs](screenshots/docker-logs-mi-nodejs.png)
-
+Demuestra el levantamiento correcto de todos los servicios.
+![docker compose up d](screenshots/docker-compose.png)
 ---
 
-## 8. Publicación en Docker Hub
+## 3 Red personalizada creada
 
-### **Tag y Push a Docker Hub**
+### **docker network ls**
 
-`docker tag mi-nodejs-app:1.0 miusuario/mi-nodejs-app:1.0`
-**Screenshot:**
-![docker tag push mi-nodejs docker hub](screenshots/docker-tag-push.docker-hub.png)
-
-### **URL Pública**
-
-`https://hub.docker.com/repository/docker/rainergtz/mi-nodejs/general`
-
-### **Screenshot de Docker Hub**
-
-![Docker Hub](screenshots/docker-hub-mi-nodejs.png)
-
+Lista las redes y confirma la existencia de `clase3-app-network`.
+![docker network ls](screenshots/docker-network-ls.png)
 ---
 
-### **Optimizaciones realizadas**
+## 4 Inspección de la red custom
 
-- Uso de **multi-stage build**
-    
-- Instalación de dependencias en un stage separado
-    
-- Reducción de capas
-    
-- Imagen base **node:18-alpine** (más ligera)
-    
-- Copia solo de archivos necesarios
-    
-- Eliminación de `node_modules` locales (gracias al builder)
-    
+### **docker network inspect clase3-app-network**
 
+Muestra los contenedores conectados y sus direcciones IP.
+![docker network inspect](screenshots/docker-network-clase3-app-network.png)
 ---
 
-### **Capas de la imagen (docker history)**
+## 5 Volumen persistente
 
-`docker history mi-nodejs:1.0`
+### **docker volume ls**
 
+Confirma que el volumen named `mysql_data` (o el que uses) fue creado correctamente.
+![docker volume ls](screenshots/docker-volume-ls.png)
 ---
 
-## 9. Conclusiones
+## 6 Página web funcionando (Nginx)
 
-Durante esta práctica se aprendió a:
+### **Acceso vía navegador**
 
-- Crear una aplicación Node.js simple con Express
-    
-- Dockerizarla correctamente
-    
-- Aplicar un **multi-stage build**
-    
-- Optimizar el tamaño de la imagen
-    
-- Publicar una imagen en Docker Hub
-    
-- Ejecutar y probar correctamente la API en un contenedor
-    
+Demuestra que el servicio web es accesible desde [http://localhost:8080](http://localhost:8080) (o tu puerto configurado).
+![docker web](screenshots/web.png)
+---
 
-### **Diferencias con Clase 1**
+## 7 Interacción vía Docker Exec
 
-- Clase 1: solo imágenes simples (Apache, Redis, MySQL)
-    
-- Clase 2: se crea una **aplicación real**, se dockeriza, se optimiza y se publica.
+### **docker compose exec**
+
+Evidencia de ingreso a contenedores para pruebas internas, validando la persistencia posterior a realizar docker compose down y docker compose up.
+![docker compose exec](screenshots/docker-compose-exec.png)
+---
+
+## 8 Prueba de persistencia
+
+### **docker compose down / up -d**
+
+Muestra que al bajar y subir de nuevo, los servicios continúan funcionando y la base de datos mantiene los datos.
+
+### docker compose down
+![docker compose down up](screenshots/docker-compose-down-up.png)
+---
+
+## 9 Conexión entre servicios (Ping / DNS interno)
+
+### **Validación de comunicación entre contenedores**
+
+Demuestra que los servicios se encuentran en la misma red y resuelven sus nombres vía DNS.
+![docker ping services](screenshots/ping-services.png)
+---
+
+## 10 Adminer — Pantalla de Login
+
+### **Login inicial**
+
+Evidencia de acceso al cliente Adminer.
+![adminer login](screenshots/adminer-login.png)
+---
+
+## 11 Adminer — Conexión con la Base de Datos
+
+### **Datos de conexión completados**
+
+Muestra el formulario con host, usuario, contraseña y base de datos.
+![adminer conexion bd](screenshots/adminer-login-datos.png)
+---
+
+## 12 Adminer — Contenido de MySQL
+
+### **Bases de datos visibles**
+
+Vista del contenido dentro del servidor MySQL.
+![adminer contenido bd](screenshots/adminer-mysql-contenido.png)
+---
+
+## 13 Adminer — Usuarios de la Base de Datos
+
+### **Usuarios configurados en MySQL**
+
+Demuestra la correcta creación del usuario definido por variables de entorno.
+![adminer usuarios bd](screenshots/adminer-mysql-usuarios.png)
