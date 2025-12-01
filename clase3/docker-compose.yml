@@ -1,0 +1,49 @@
+# docker-compose.yml - Curso Clase 3 (Nginx + MySQL + Adminer)
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: curso_nginx
+    ports:
+      - "8080:80"                     # Web accesible en http://localhost:8080
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: curso_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword   # Cambia esta contraseña en producción
+      MYSQL_DATABASE: curso_db
+      MYSQL_USER: curso
+      MYSQL_PASSWORD: curso123
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    container_name: curso_adminer
+    ports:
+      - "8081:8080"   # Adminer accesible en http://localhost:8081
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge

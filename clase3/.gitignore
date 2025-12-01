@@ -1,0 +1,4 @@
+# No subir datos persistentes de Docker
+db-data/
+*.sql
+*.env
