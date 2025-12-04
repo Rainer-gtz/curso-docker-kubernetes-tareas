@@ -1,0 +1,22 @@
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python caches (si aplicas)
+__pycache__/
+*.pyc
+
+# Docker
+*.pid
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Capturas
+docs/screenshots/*.png
+docs/screenshots/*.jpg

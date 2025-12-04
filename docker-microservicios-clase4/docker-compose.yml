@@ -1,0 +1,82 @@
+services:
+  gateway:
+    image: nginx:alpine
+    container_name: gateway
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      - frontend
+      - products
+      - cart
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  products:
+    build:
+      context: ./products-service
+    container_name: products-service
+    environment:
+      - PORT=5001
+      - MONGO_URI=mongodb://mongo:27017/appdb
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_TTL_SECONDS=60
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  cart:
+    build:
+      context: ./cart-service
+    container_name: cart-service
+    environment:
+      - PORT=5002
+      - MONGO_URI=mongodb://mongo:27017/appdb
+    depends_on:
+      - mongo
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7.0
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=appdb
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-net
+    restart: unless-stopped
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  redis-data:
