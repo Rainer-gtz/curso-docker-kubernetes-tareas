@@ -182,7 +182,7 @@ curl -X POST http://localhost:3000/products \
 **Descripción:** Verificación del usuario en ejecución para la imagen baseline: se ejecuta como root. Comprobación de seguridad inicial.
 
 ---
-### 4) Escaneo Trivy - baseline.png
+### 4) Escaneo Trivy - baseline
 ![trivy-image-miapp-baseline](docs/screenshots/trivy-image-miapp-baseline.png)
 **Descripción:** Escaneo Trivy de la imagen baseline mostrando vulnerabilidades detectadas antes de optimizar. Evidencia de riesgos iniciales.
 
