@@ -18,5 +18,5 @@ logs/
 *.log
 
 # Capturas
-docs/screenshots/*.png
-docs/screenshots/*.jpg
+#docs/screenshots/*.png
+#docs/screenshots/*.jpg
